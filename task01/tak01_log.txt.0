@@ -1,0 +1,28 @@
+[2022-12-05 17:31:39] [INFO   ] /info 
+[2022-12-05 17:31:44] [INFO   ] /printAll 
+[2022-12-05 17:31:44] [INFO   ] /printCurrent Olga 
+[2022-12-05 17:31:44] [INFO   ] /printCurrent Egor 
+[2022-12-05 17:31:44] [INFO   ] /printCurrent Ivan 
+[2022-12-05 17:31:44] [INFO   ] /printCurrent Qwerty 
+[2022-12-05 17:31:44] [INFO   ] /printCurrent Marina 
+[2022-12-05 17:31:57] [INFO   ] /addRecord ttttttt 
+[2022-12-05 17:32:05] [INFO   ] /printAll 
+[2022-12-05 17:32:05] [INFO   ] /printCurrent Olga 
+[2022-12-05 17:32:05] [INFO   ] /printCurrent Egor 
+[2022-12-05 17:32:05] [INFO   ] /printCurrent Ivan 
+[2022-12-05 17:32:05] [INFO   ] /printCurrent ttttttt 
+[2022-12-05 17:32:05] [INFO   ] /printCurrent Qwerty 
+[2022-12-05 17:32:05] [INFO   ] /printCurrent Marina 
+[2022-12-05 17:32:25] [INFO   ] Error command: "/set current ttttttt"
+ 
+[2022-12-05 17:32:34] [INFO   ] Error command: "/setCurrent ttttttt"
+ 
+[2022-12-05 17:33:09] [INFO   ] /addPhone ttttttt > 000-000 
+[2022-12-05 17:33:14] [INFO   ] /printAll 
+[2022-12-05 17:33:14] [INFO   ] /printCurrent Olga 
+[2022-12-05 17:33:14] [INFO   ] /printCurrent Egor 
+[2022-12-05 17:33:14] [INFO   ] /printCurrent Ivan 
+[2022-12-05 17:33:14] [INFO   ] /printCurrent ttttttt 
+[2022-12-05 17:33:14] [INFO   ] /printCurrent Qwerty 
+[2022-12-05 17:33:14] [INFO   ] /printCurrent Marina 
+[2022-12-05 17:33:21] [INFO   ] /quit 
