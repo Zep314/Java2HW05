@@ -2,6 +2,7 @@ package controller;
 
 import model.Data;
 import util.MyJsonRoutine;
+import util.MyXmlRoutine;
 import util.Settings;
 import view.View;
 
@@ -52,8 +53,10 @@ public class Controller {  // Класс контроллера - тут все 
                     case "/printAll" -> view.printAll(this.db);
                     case "/printCurrent" -> view.printCurrent(this.db);  // Печатаем текущую запись
                     case "/setRecord" -> setRecord(inputLine.split(" ",2)[1]);        // Установка указателя на нужную запись
-                    case "/save" -> saveToJSON(inputLine.split(" ",2)[1]);            // Сохранение всего списка задач в файл JSON
-                    case "/load" -> loadFromJSON(inputLine.split(" ",2)[1]);          // Загрузка из файла JSON списка задач
+                    case "/saveJSON" -> saveToJSON(inputLine.split(" ",2)[1]);            // Сохранение всего списка задач в файл JSON
+                    case "/loadJSON" -> loadFromJSON(inputLine.split(" ",2)[1]);          // Загрузка из файла JSON списка задач
+                    case "/saveXML" -> saveToXML(inputLine.split(" ",2)[1]);            // Сохранение всего списка задач в файл JSON
+                    case "/loadXML" -> loadFromXML(inputLine.split(" ",2)[1]);          // Загрузка из файла JSON списка задач
                     default -> view.errorCommand(inputLine);
                 }
             }
@@ -62,6 +65,15 @@ public class Controller {  // Класс контроллера - тут все 
         view.bye();
     }
 
+    private void setRecord(String record) {
+        if (db.dataBase.containsKey(db.getCurrent())) {
+            db.setCurrent(record);
+            System.out.printf("Текущая запись %s установлена!%n", record);
+        }
+        else {
+            System.out.printf("Записи с именем %s не существует!%n Текущей записью остается %s%n", record, db.getCurrent());
+        }
+    }
     private void loadFromJSON(String file) throws IOException, ParseException {
         this.db = MyJsonRoutine.readData(file);
 
@@ -72,13 +84,14 @@ public class Controller {  // Класс контроллера - тут все 
     private void saveToJSON(String file) throws IOException {
         MyJsonRoutine.writeData(this.db,file);
     }
-    private void setRecord(String record) {
-        if (db.dataBase.containsKey(db.getCurrent())) {
-            db.setCurrent(record);
-            System.out.printf("Текущая запись %s установлена!%n", record);
-        }
-        else {
-            System.out.printf("Записи с именем %s не существует!%n Текущей записью остается %s%n", record, db.getCurrent());
-        }
+    private void loadFromXML(String file) throws IOException, ParseException {
+        this.db = MyXmlRoutine.readData(file);
+
+        Map.Entry<String, ArrayList> entry = db.dataBase.entrySet().iterator().next();
+        db.setCurrent(entry.getKey());
+    }
+
+    private void saveToXML(String file) throws IOException {
+        MyXmlRoutine.writeData(this.db,file);
     }
 }
