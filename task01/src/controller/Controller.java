@@ -1,11 +1,5 @@
 package controller;
 
-import model.Data;
-import util.MyJsonRoutine;
-import util.MyXmlRoutine;
-import util.Settings;
-import view.View;
-
 import java.util.ArrayList;
 import java.io.IOException;
 import java.util.Map;
@@ -15,12 +9,17 @@ import java.util.logging.Logger;
 
 import org.json.simple.parser.ParseException;
 
+import model.Data;
+import util.MyJsonRoutine;
+import util.MyXmlRoutine;
+import util.Settings;
+import view.View;
+
 
 public class Controller {  // Класс контроллера - тут все и происходит
     private final Logger log = Logger.getLogger(Controller.class.getName());
     Data db = new Data();
     View view = new View(this.log);  // Цепляем вьювер
-//    List<WorkJob> list = new ArrayList<>();  // Данные из модели
     public Controller() {  // Активируем логгер
         try {
             LogManager.getLogManager().readConfiguration( // берем конфиг для логов

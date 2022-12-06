@@ -19,8 +19,8 @@ public class Data {
     }
 
     public int addRecord(String name) {
-        if (!this.dataBase.containsKey(name)) {
-            this.dataBase.put(name, new ArrayList<String>());
+        if (!dataBase.containsKey(name)) {
+            dataBase.put(name, new ArrayList<String>());
             this.current = name;  // Установка указателя на новую запись
             return 0;
         } else {
@@ -28,7 +28,7 @@ public class Data {
         }
     }
     public void addPhone(String phone) {
-        ArrayList<String> phones = this.dataBase.get(this.current);
+        ArrayList<String> phones = dataBase.get(this.current);
         phones.add(phone);
     }
 }

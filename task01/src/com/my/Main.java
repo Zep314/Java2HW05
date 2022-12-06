@@ -2,7 +2,7 @@ package com.my;
 import controller.Controller;
 
 import java.io.IOException;
-import java.text.ParseException;
+
 /* Задание
 Дописать телефонный справочник:
 Создать телефонный справочник с возможностью импорта и
@@ -12,9 +12,6 @@ import java.text.ParseException;
 строка - разделитель
 
  */
-
-
-//import controller.Controller;
 
 public class Main {
     public static void main(String[] args) throws IOException, org.json.simple.parser.ParseException {
