@@ -33,8 +33,6 @@ public class View {   // Класс вьювера - вывод на экран 
         System.out.println("/addRecord <name> - добавление записи с именем <name>");
         System.out.println("/addPhone <phoneNumber> - добавление номера телефона <phoneNumber> в текущую запись");
         System.out.println("/setRecord <name> - установка записи <name> в качестве текущей");
-        System.out.println("/editRecord <name> - редактирование записи с индексом <name>");
-        System.out.println("/editPhone <phoneNumber> - редактирование номера телефона <phoneNumber> в текущей записи");
         System.out.println("/saveJSON <file> - сохранение базы в файл <file> в формате JSON");
         System.out.println("/loadJSON <file> - чтение из файла <file> в формате JSON базы данных");
         System.out.println("/saveTXT <file> - сохранение базы в файл <file> в формате TXT");
@@ -42,159 +40,7 @@ public class View {   // Класс вьювера - вывод на экран 
         System.out.println("/saveXML <file> - сохранение базы в файл <file> в формате XML");
         System.out.println("/loadXML <file> - чтение из файла <file> в формате XML базы данных");
     }
-
-//    public void printOneJob(Job job) {  // Выводим одну запись на экран
-//        log.info(String.format("/printCurrent: %s%n",((WorkJob)job).toString()));
-//        System.out.println("Текущая задача:");
-//        System.out.println("ID: "+((WorkJob)job).getId().toString());
-//        System.out.println("Приоритет: "+((WorkJob)job).getPriority());
-//        System.out.println("Автор: "+((WorkJob)job).getAuthor());
-//        System.out.println("Текст задачи: "+((WorkJob)job).getSubject());
-//        System.out.println("Задача создана: "+((WorkJob)job).getCreationDT().format(Settings.formatter));
-//        System.out.println("Дедлайн: "+((WorkJob)job).getDeadlineDT().format(Settings.formatter));
-//    }
-//    public WorkJob recordAddEdit(boolean edit, WorkJob job) {  // Добавление или редактирование одной записи
-//        WorkJob newRecord = new WorkJob();
-//        log.info(edit ? String.format("/editRecord: %s%n", ((WorkJob)job).toString()) : "/addRecord");
-//        Scanner scan = new Scanner(System.in);
-//        String inputLine = "";
-//        boolean isCorrect = false;
-//        System.out.println(edit ? "Редактирование текущей записи" : "Добавление новой записи");
-//
-//        if (edit) {
-//            System.out.println("Если хотите оставить поле без изменений - просто нажмите Enter");
-//            System.out.printf("Текст задачи: %s%n", job.getSubject());
-//        }
-//        // Обработка ввода текста задачи
-//        System.out.print("Введите текст задачи: ");
-//        inputLine = scan.nextLine();
-//        newRecord.setSubject((edit) ? (inputLine.length()>0) ? inputLine : job.getSubject() : inputLine);
-//
-//        do {  // обработка ввода приоритета
-//            if (edit) {
-//                System.out.printf("Текущий приоритет %s%n", job.getPriority());
-//            }
-//            System.out.printf("Введите приоритет задачи: %s1 - LOW; 2 - MIDDLE; 3 - HIGH: ",
-//                                (edit) ? "0 - не меняем; " : "");
-//            inputLine = scan.nextLine();
-//
-//            if (inputLine != null && inputLine.matches("[0-9]+")) {
-//                if (0 <= Integer.parseInt(inputLine) && Integer.parseInt(inputLine) < 4) {
-//                    isCorrect = true;
-//                }
-//            }
-//            if (!isCorrect) {
-//                System.out.println("Некорректный ввод! повторите!");
-//            }
-//        } while (!isCorrect);
-//        if (edit && Integer.parseInt(inputLine) == 0) {
-//            newRecord.setPriority(job.getPriority().getPriority());
-//        }
-//        else {
-//            switch (Integer.parseInt(inputLine)) {
-//                case Priority.MIDDLE -> newRecord.setPriority(Priority.MIDDLE);
-//                case Priority.HIGH -> newRecord.setPriority(Priority.HIGH);
-//                default -> newRecord.setPriority(Priority.LOW);
-//            }
-//        }
-//
-//        // обработка ввода имени автора
-//        if (edit) {
-//            System.out.printf("Автор: %s%n", job.getAuthor());
-//        }
-//        System.out.print("Введите автора: ");
-//        inputLine = scan.nextLine();
-//        newRecord.setAuthor((edit) ? (inputLine.length()>0) ? inputLine : job.getAuthor() : inputLine);
-//
-//        // Обработка времени создания записи
-//        // Если редактируем - то время создания - прежнее
-//        if (edit) {
-//            newRecord.setCreationDT(job.getCreationDT());
-//        }
-//        else {  // Ели добавили новую задачу - ставим текущее время
-//            newRecord.setCreationDT(LocalDateTime.now());
-//        }
-//
-//        // Обработка ввода времени дедлайна
-//        isCorrect = false;
-//        do {
-//            if (edit) {
-//                System.out.printf("Текущий дедлайн: %s%n", job.getDeadlineDT().format(Settings.formatter));
-//            }
-//            System.out.print("Введите дату и время дедлайна в формате (dd-MM-yyyy HH:mm:ss): ");
-//            inputLine = scan.nextLine();
-//            try {
-//                isCorrect = true;
-//            } catch (Exception e) {
-//                if (edit && inputLine.length() == 0) {
-//                    isCorrect = true;
-//                }
-//                else {
-//                    System.out.println("Некорректный ввод! повторите!");
-//                }
-//            }
-//        } while (!isCorrect);
-//        if (edit && inputLine.length() == 0) {
-//            newRecord.setDeadlineDT(job.getDeadlineDT());
-//        }
-//        else {
-//            newRecord.setDeadlineDT(LocalDateTime.parse(inputLine,Settings.formatter));
-//        }
-//
-//        System.out.print("Сохранить информацию? [Y/n]");
-//        inputLine = scan.nextLine();
-//        if (inputLine.equals("Y") || inputLine.isEmpty()) {
-//            log.info(String.format("%s%n%s%n",(edit) ? "Отредактированная запись:":"Новая запись:",newRecord.toString()));
-//            System.out.println("Информация сохранена");
-//            return newRecord;
-//        }
-//        else {
-//            log.info("Операция отменена.");
-//            return null;
-//        }
-//    }
-//    public void printAll(List<WorkJob> localList,Integer index) {  // Красивый вывод на печать всего списка задач
-//        WorkJobStream stream = new WorkJobStream(localList);
-//        WorkJob job = new WorkJob();
-//        log.info("/printAll");
-//        System.out.println("| ID|Приор.|      Дедлайн      |                      Задача                      |             Автор            |       Создано     |");
-//        System.out.printf("+%s+%s+%s+%s+%s+%s+%n"
-//                , "-".repeat(3)
-//                , "-".repeat(6)
-//                , "-".repeat(19)
-//                , "-".repeat(50)
-//                , "-".repeat(30)
-//                , "-".repeat(19)
-//        );
-//        stream.mySort();  // Сортируем список в соответствие с правилами
-//        while (stream.hasNext()) {
-//            job = stream.next();
-//            System.out.printf("%s%3d|%6s|%19s|%50s|%30s|%19s|%n"
-//                    , (job.getId() == index) ? "*" : "|"
-//                    , job.getId()
-//                    , ((Priority)job.getPriority()).toString()
-//                    , job.getDeadlineDT().format(Settings.formatter)
-//                    , job.getSubject()
-//                    , job.getAuthor()
-//                    , job.getCreationDT().format(Settings.formatter)
-//                    );
-//        }
-//    }
-//    public Integer setIndex() {  // установка индекса текущей записи
-//        log.info("/setRecord");
-//        Scanner scan = new Scanner(System.in);
-//        while (true) {
-//            System.out.print("Введите новый индекс текущей записи: ");
-//            String inputLine = scan.nextLine();
-//            if (inputLine != null && inputLine.matches("[0-9]+")) {
-//                if (0 < Integer.parseInt(inputLine)) {
-//                    return Integer.parseInt(inputLine);
-//                }
-//            }
-//                System.out.println("Некорректный ввод! повторите!");
-//        }
-//    }
-    public void printCurrent(Data db) {
+    public void printCurrent(Data db) {  // Печатаем текущую запись
         log.info(String.format("/printCurrent %s",db.getCurrent()));
         if (!db.dataBase.containsKey(db.getCurrent())) {
             System.out.println("Записи с таким именем нет!");
@@ -213,17 +59,17 @@ public class View {   // Класс вьювера - вывод на экран 
         }
     }
 
-    public void printAll(Data db) {
+    public void printAll(Data db) {  // Выводим на печать всю базу целиком
         log.info("/printAll");
         String saveCurrent = db.getCurrent();
-        for(String s: db.dataBase.keySet()) {
+        for(String s: db.dataBase.keySet()) {  // Проходим по всем записям - и печатаем их отдельно
             db.setCurrent(s);
             printCurrent(db);
             System.out.println();  // Разделитель между записями
         }
         db.setCurrent(saveCurrent);
     }
-    public void addRecord(Data db, String name) {
+    public void addRecord(Data db, String name) {  // добавление новой записа в базу
         log.info(String.format("/addRecord %s", name));
         if (name.length() > 0) {
             if (db.addRecord(name) == 0) {
@@ -238,7 +84,7 @@ public class View {   // Класс вьювера - вывод на экран 
         }
     }
 
-    public void addPhone(Data db,String phone) {
+    public void addPhone(Data db,String phone) {  // добавление нового телефона к текущей записи
         log.info(String.format("/addPhone %s > %s", db.getCurrent(),phone));
         if (db.getCurrent().length() == 0) {
             System.out.println("База данных пуста! Не к чему добавлять телефон!");
@@ -253,6 +99,5 @@ public class View {   // Класс вьювера - вывод на экран 
                 System.out.println("Укажите номер телефона!\n Номер телефона не добавлен!");
             }
         }
-
     }
 }

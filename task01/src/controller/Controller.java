@@ -12,6 +12,7 @@ import org.json.simple.parser.ParseException;
 import model.Data;
 import util.MyJsonRoutine;
 import util.MyXmlRoutine;
+import util.MyTxtRoutine;
 import util.Settings;
 import view.View;
 
@@ -34,7 +35,7 @@ public class Controller {  // Класс контроллера - тут все 
         String inputLine = "";
         view.info();
 
-        loadFromJSON(Settings.db);
+        loadFromJSON(Settings.db);  // По умолчанию - все храним в JSON
 
         while (!ex) {  // главный цикл программы
             System.out.print(">>> ");
@@ -46,16 +47,16 @@ public class Controller {  // Класс контроллера - тут все 
                     case "/info" -> this.view.info();  // Информация
                     case "/help" -> this.view.help();  // Помощь
                     case "/addRecord" -> view.addRecord(db, inputLine.split(" ",2)[1]);  // Добавляем новую запись
-                    case "/addPhone" -> view.addPhone(db ,inputLine.split(" ",2)[1]);
-//                    case "/editRecord" -> view.editRecord();  // Редактируем текущую запись
-//                    case "/editPhone" -> ;
-                    case "/printAll" -> view.printAll(this.db);
+                    case "/addPhone" -> view.addPhone(db ,inputLine.split(" ",2)[1]);   // Добавляем новый телефон
+                    case "/printAll" -> view.printAll(this.db);     // Красиво выводим всю базу на печать
                     case "/printCurrent" -> view.printCurrent(this.db);  // Печатаем текущую запись
                     case "/setRecord" -> setRecord(inputLine.split(" ",2)[1]);        // Установка указателя на нужную запись
-                    case "/saveJSON" -> saveToJSON(inputLine.split(" ",2)[1]);            // Сохранение всего списка задач в файл JSON
-                    case "/loadJSON" -> loadFromJSON(inputLine.split(" ",2)[1]);          // Загрузка из файла JSON списка задач
-                    case "/saveXML" -> saveToXML(inputLine.split(" ",2)[1]);            // Сохранение всего списка задач в файл JSON
-                    case "/loadXML" -> loadFromXML(inputLine.split(" ",2)[1]);          // Загрузка из файла JSON списка задач
+                    case "/saveJSON" -> saveToJSON(inputLine.split(" ",2)[1]);            // Сохранение всей базы в файл JSON
+                    case "/loadJSON" -> loadFromJSON(inputLine.split(" ",2)[1]);          // Загрузка из файла JSON в базу
+                    case "/saveXML" -> saveToXML(inputLine.split(" ",2)[1]);            // Сохранение всей базы в файл XML
+                    case "/loadXML" -> loadFromXML(inputLine.split(" ",2)[1]);          // Загрузка из файла XML в базу
+                    case "/saveTXT" -> saveToTXT(inputLine.split(" ",2)[1]);            // Сохранение всей базы в файл TXT
+                    case "/loadTXT" -> loadFromTXT(inputLine.split(" ",2)[1]);          // Загрузка из файла TXT в базу
                     default -> view.errorCommand(inputLine);
                 }
             }
@@ -64,7 +65,7 @@ public class Controller {  // Класс контроллера - тут все 
         view.bye();
     }
 
-    private void setRecord(String record) {
+    private void setRecord(String record) {  // Установка текущей записи
         if (db.dataBase.containsKey(db.getCurrent())) {
             db.setCurrent(record);
             System.out.printf("Текущая запись %s установлена!%n", record);
@@ -92,5 +93,16 @@ public class Controller {  // Класс контроллера - тут все 
 
     private void saveToXML(String file) throws IOException {
         MyXmlRoutine.writeData(this.db,file);
+    }
+
+    private void loadFromTXT(String file) throws IOException, ParseException {
+        this.db = MyTxtRoutine.readData(file);
+
+        Map.Entry<String, ArrayList> entry = db.dataBase.entrySet().iterator().next();
+        db.setCurrent(entry.getKey());
+    }
+
+    private void saveToTXT(String file) throws IOException {
+        MyTxtRoutine.writeData(this.db,file);
     }
 }

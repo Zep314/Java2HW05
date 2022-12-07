@@ -1,9 +1,6 @@
 package util;
 import model.Data;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
+import org.w3c.dom.*;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -15,42 +12,46 @@ import javax.xml.transform.stream.StreamResult;
 import java.io.File;
 import java.util.ArrayList;
 
-public class MyXmlRoutine {
+public class MyXmlRoutine {  // Читаем / Пишем в XML файл
     public static Data readData(String filename) {
         Data db = new Data();
+        db.clear();
+        if (new File(filename).exists()) {  // Проверка на существование
+            File xmlFile = new File(filename);
+            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder builder;
+            try {
+                builder = factory.newDocumentBuilder();
+                // создаем пустой объект Document, в который считаем xml-файл
+                Document document = builder.parse(xmlFile);
+                document.getDocumentElement().normalize();
 
-        File xmlFile = new File(filename);
-        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-        DocumentBuilder builder;
-        try {
-            builder = factory.newDocumentBuilder();
-            Document document = builder.parse(xmlFile);
-            document.getDocumentElement().normalize();
-            System.out.println("Корневой элемент: " + document.getDocumentElement().getNodeName());
-            // получаем узлы с именем Language
-            // теперь XML полностью загружен в память
-            // в виде объекта Document
-            NodeList nodeList = document.getElementsByTagName("Abonent");
-//            NodeList nodeList = document.getElementsByTagName("Abonent");
+                Element root = document.getDocumentElement();  // Вытаскиваем корень XML
+                System.out.println(root.getNodeName());
 
-            for (int i = 0; i < nodeList.getLength(); i++) {
-                ArrayList<String> phones = new ArrayList<String>();
-                String name = "";
-                Node element = nodeList.item(i);
-                name = element.getAttributes().item(0).getNodeName();
-                db.dataBase.put(name,phones);
-                //langList.add(getLanguage(nodeList.item(i)));
+                NodeList nList = document.getElementsByTagName("Abonent");  // Список таких элементов ищем
+
+                for (int i = 0; i < nList.getLength(); i++) {  // Обработка списка
+                    if (nList.item(i).getNodeType() == Node.ELEMENT_NODE) {
+                        Element eElement = (Element) nList.item(i);
+                        ArrayList<String> phones = new ArrayList<String>();
+                        for (int j = 0; j < eElement.getChildNodes().getLength(); j++) {  // Тут обрабатываем
+                                                                                          // список телефонов
+                            if (eElement.getChildNodes().item(j).getNodeType() == Node.ELEMENT_NODE) {
+                                phones.add(eElement.getChildNodes().item(j).getTextContent());
+                            }
+                        }
+                        db.dataBase.put(eElement.getAttribute("name"), phones);  // Записываем все в базу данных
+                    }
+                }
+                System.out.printf("Данные прочитаны из файла %s%n", filename);
+            } catch (Exception exc) {
+                exc.printStackTrace();
             }
-
-            // печатаем в консоль информацию по каждому объекту Language
-//            for (Language lang : langList) {
-//                System.out.println(lang.toString());
-//            }
-        } catch (Exception exc) {
-            exc.printStackTrace();
         }
-
-
+        else {
+            System.out.printf("Файл %s не найден! Загружена пустая база данных!%n", filename);
+        }
         return db;
     }
 
@@ -62,22 +63,22 @@ public class MyXmlRoutine {
 
             // создаем пустой объект Document, в котором будем
             // создавать наш xml-файл
-            Document doc = builder.newDocument();
+            Document document = builder.newDocument();
             // создаем корневой элемент
             Element rootElement =
-                    doc.createElementNS("http://www.w3.org/2001/XMLSchema", "Abonents");
+                    document.createElementNS("http://www.w3.org/2001/XMLSchema", "Abonents");
             // добавляем корневой элемент в объект Document
-            doc.appendChild(rootElement);
+            document.appendChild(rootElement);
 
             Element element;
             for(String s: db.dataBase.keySet()) { // создаем новый узел XML
-                element = doc.createElement("Abonent");
+                element = document.createElement("Abonent");
                 element.setAttribute("name", s);  // устанавливаем атрибут
                 Element node;
                 ArrayList<String> phones = db.dataBase.get(s);
                 for(String p: phones) {  // создаем новый подузел XML
-                    node = doc.createElement("phone");
-                    node.appendChild(doc.createTextNode(p));
+                    node = document.createElement("phone");
+                    node.appendChild(document.createTextNode(p));
                     element.appendChild(node);
                 }
                 rootElement.appendChild(element);
@@ -87,7 +88,7 @@ public class MyXmlRoutine {
             Transformer transformer = transformerFactory.newTransformer();
             // для красивого вывода в файл
             transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-            DOMSource source = new DOMSource(doc);
+            DOMSource source = new DOMSource(document);
 
             //печатаем в файл
             StreamResult file = new StreamResult(new File(filename));

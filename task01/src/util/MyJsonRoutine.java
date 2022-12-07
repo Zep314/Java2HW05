@@ -15,9 +15,10 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Set;
 
-public class MyJsonRoutine {
+public class MyJsonRoutine {  // Читаем / Пишем в фал JSON
     public static Data readData(String filename) throws IOException, ParseException {
         Data db = new Data();
+        db.clear();
         if (new File(filename).exists()) {
             FileReader reader = new FileReader(filename);               // Читаем файл
             JSONParser jsonParser = new JSONParser();
